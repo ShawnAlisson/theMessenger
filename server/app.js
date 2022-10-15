@@ -11,6 +11,21 @@ const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 
 const app = express();
 
+//* Redirect HTTP to HTTPS in Production
+function isSecure(req) {
+  if (req.headers["x-forwarded-proto"]) {
+    return req.headers["x-forwarded-proto"] === "https";
+  }
+  return req.secure;
+}
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV == "production" && !isSecure(req)) {
+    res.redirect(301, `https://${req.headers.host}${req.url}`);
+  } else {
+    next();
+  }
+});
+
 app.use(cors());
 app.use(express.json());
 
@@ -21,6 +36,7 @@ app.use("/api/v1/message", messageRoutes);
 //* Deployment
 const __dirname1 = path.resolve();
 
+//* Set React Build Folder as Static in Production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname1, "/client/build")));
 
@@ -35,8 +51,5 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(notFound);
 app.use(errorHandler);
-// app.get("/", (req, res) => {
-//   res.send("Server is running...");
-// });
 
 module.exports = app;

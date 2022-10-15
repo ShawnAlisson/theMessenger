@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 
-import { Box } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 
 import ChatContext from "../Context/chatContext";
 import SideBar from "../components/others/SideBar";
@@ -13,6 +13,8 @@ const Chats = () => {
   //* Context
   const { user } = useContext(ChatContext);
 
+  const bg = useColorModeValue("white", "gray.800");
+
   return (
     <div style={{ width: "100%" }}>
       <Box
@@ -21,7 +23,7 @@ const Chats = () => {
         padding="12px"
         justifyContent="space-between"
       >
-        <Box width={{ base: "100%", md: "31%" }} bg={"white"} borderRadius="25">
+        <Box width={{ base: "100%", md: "31%" }} bg={bg} borderRadius="25">
           {user && <SideBar />}
           {user && <MyChats getAgain={getAgain} />}
         </Box>

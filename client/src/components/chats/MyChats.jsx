@@ -1,7 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
-import { Avatar, Box, Stack, Text, useToast } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Stack,
+  Text,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
 
 import ChatContext from "../../Context/chatContext";
@@ -12,6 +20,9 @@ const MyChats = ({ getAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
   const toast = useToast();
+  const { t } = useTranslation();
+  const bg = useColorModeValue("white", "gray.800");
+  const bg_secondary = useColorModeValue("#F8F8F8", "gray.700");
 
   //* Context
   const { selectedChat, setSelectedChat, user, chats, setChats } =
@@ -51,7 +62,7 @@ const MyChats = ({ getAgain }) => {
       flexDir="column"
       alignItems="center"
       padding={3}
-      bg="white"
+      bg={bg}
       width={{ base: "100%", md: "100%" }}
       height="85vh"
       borderWidth="0px"
@@ -70,13 +81,14 @@ const MyChats = ({ getAgain }) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Text>My Chats</Text>
+        <Text>{t("my_chats")}</Text>
       </Box>
       <Box
+        dir="ltr"
         display="flex"
         flexDir="column"
         padding={3}
-        bg="#F8F8F8"
+        bg={bg_secondary}
         width="100%"
         height="100%"
         borderRadius="25"
@@ -89,8 +101,8 @@ const MyChats = ({ getAgain }) => {
                 display={"flex"}
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
-                color={selectedChat === chat ? "white" : "black"}
+                bg={selectedChat === chat ? "#38B2AC" : ""}
+                color={selectedChat === chat ? "white" : ""}
                 px={3}
                 py={2}
                 borderRadius="25"

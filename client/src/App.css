@@ -1,5 +1,6 @@
 
   .App {
+    font-family: 'Helvetica Neue', 'Yekan';
     display:flex;
     align-items: center;
     min-height: 100vh;

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 import {
   Avatar,
@@ -21,6 +22,7 @@ import {
   MenuItem,
   MenuList,
   Text,
+  useColorModeValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -37,6 +39,7 @@ import UserList from "./UserList";
 import GroupChatModal from "../chats/GroupChatModal";
 import { getSender } from "../../config/ChatLogics";
 import About from "./About";
+import i18next from "i18next";
 
 const SideBar = () => {
   const [search, setSearch] = useState("");
@@ -45,9 +48,12 @@ const SideBar = () => {
   const [loadingChat, setLoadingChat] = useState(false);
 
   const toast = useToast();
+  const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const firstField = React.useRef();
+
+  const bg = useColorModeValue("white", "gray.800");
 
   //* Context
   const {
@@ -178,8 +184,7 @@ const SideBar = () => {
         width="100%"
         // height={"95vh"}
         padding="5px 10px 5px 10px"
-        bg="white"
-        color="black"
+        bg={bg}
         borderRadius={{
           base: "25px 25px 0px 0px",
           md: "25px 25px 25px 25px",
@@ -200,23 +205,23 @@ const SideBar = () => {
                 // src={user.avatar}
               />
             </MenuButton>
-            <MenuList>
+            <MenuList borderRadius={"20"}>
               <ProfileModal user={user}>
-                <MenuItem>My Profile</MenuItem>
+                <MenuItem borderRadius={"10"}>{t("my_profile")}</MenuItem>
               </ProfileModal>
               <About user={user}>
-                <MenuItem>About</MenuItem>
+                <MenuItem borderRadius={"10"}>{t("about")}</MenuItem>
               </About>
               <MenuDivider />
-              <MenuItem fontWeight="bold" color="black" onClick={logoutHandler}>
-                Logout
+              <MenuItem borderRadius={"10"} color="red" onClick={logoutHandler}>
+                {t("logout")}
               </MenuItem>
             </MenuList>
           </Menu>
           <Box width="55%">
             <InputGroup onClick={onOpen}>
               <Input
-                value="Search User"
+                value={t("search_user")}
                 color={"grey"}
                 type="button"
                 borderRadius={"20px"}
@@ -248,8 +253,8 @@ const SideBar = () => {
                 />
                 <BellIcon fontSize="2xl" margin={1} />
               </MenuButton>
-              <MenuList pl={2} borderRadius="20">
-                {!notification.length && "No New Messages"}
+              <MenuList pl={2} borderRadius="20" padding={2}>
+                {!notification.length && t("no_new_message")}
                 {notification.map((notif) => (
                   <MenuItem
                     key={notif._id}
@@ -269,18 +274,23 @@ const SideBar = () => {
         </Box>
       </Box>
       <Drawer
-        placement="left"
+        placement={i18next.dir() === "ltr" ? "left" : "right"}
         onClose={onClose}
         isOpen={isOpen}
         initialFocusRef={firstField}
       >
         <DrawerOverlay />
-        <DrawerContent borderRadius="0px 25px 25px 0px">
-          <DrawerHeader>
+        <DrawerContent
+          borderRadius={
+            i18next.dir() === "ltr" ? "0px 25px 25px 0px" : "25px 0px 0px 25px"
+          }
+          fontFamily={"Yekan"}
+        >
+          <DrawerHeader mt={10}>
             {loadingChat ? (
               <HashLoader color="#ff6b6b" size={"32"} />
             ) : (
-              <Text>Search User</Text>
+              <Text>{t("search_user")}</Text>
             )}
           </DrawerHeader>
           <DrawerCloseButton />
@@ -288,25 +298,12 @@ const SideBar = () => {
             <Box>
               <InputGroup>
                 <Input
-                  placeholder="Search by name or username"
+                  placeholder={t("search_by_name_user")}
                   borderRadius={"20px"}
                   ref={firstField}
                   value={search}
                   onChange={(event) => searchHandler(event.target.value)}
                 ></Input>
-                <InputRightElement width="2.9rem">
-                  <Button
-                    _hover={{
-                      background: "#ff6b6b",
-                      color: "white",
-                    }}
-                    h="1.75rem"
-                    size="xs"
-                    borderRadius={"20px"}
-                  >
-                    {<Search2Icon />}
-                  </Button>
-                </InputRightElement>
               </InputGroup>
             </Box>
 

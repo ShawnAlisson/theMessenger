@@ -18,7 +18,7 @@ exports.validateLength = (text, min, max) => {
 
 exports.validatePassword = (password) => {
   return String(password).match(
-    /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    /^(?=.*\d)(?=.*[!@#$%^&*-])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
   );
   // .match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, "i");
 };

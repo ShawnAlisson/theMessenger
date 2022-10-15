@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import ScrollableFeed from "react-scrollable-feed";
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, useColorModeValue } from "@chakra-ui/react";
 
 import {
   isLastMessage,
@@ -15,6 +15,7 @@ const MessagesBox = ({ messages }) => {
   //* Context
   const { user } = useContext(ChatContext);
 
+  const grey_chat_color = useColorModeValue("#d8d8d8", "#818181");
   return (
     <ScrollableFeed>
       {messages &&
@@ -32,8 +33,11 @@ const MessagesBox = ({ messages }) => {
             )}
             <span
               style={{
+                direction: "rtl",
+
+                color: `${message.sender._id === user._id ? "white" : "black"}`,
                 backgroundColor: `${
-                  message.sender._id === user._id ? "#1982FC" : "#d8d8d8"
+                  message.sender._id === user._id ? "#1982FC" : grey_chat_color
                 }`,
 
                 marginLeft: isSameSenderMargin(messages, message, i, user._id),

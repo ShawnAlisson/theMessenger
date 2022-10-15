@@ -1,12 +1,26 @@
 const app = require("./app");
 const dotenv = require("dotenv").config();
 const http = require("http");
+const https = require("https");
+const fs = require(`fs`);
 const io = require("socket.io");
 const connectDB = require("./helpers/db");
 const colors = require("colors");
 
+const CERT_DIR = process.env.CERT_DIR;
+const KEY_DIR = process.env.KEY_DIR;
+
+// const options = {
+//   key: fs.readFileSync(`${KEY_DIR}`),
+//   cert: fs.readFileSync(`${CERT_DIR}`),
+// };
+
 connectDB();
+
 const httpServer = http.createServer(app);
+
+// const httpsServer = https.createServer(options, app);
+
 const socketServer = io(httpServer, {
   pingTimeout: 60000,
   cors: {
@@ -15,7 +29,8 @@ const socketServer = io(httpServer, {
   },
 });
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
+const PORT_HTTP = process.env.PORT_HTTP || 8000;
 
 socketServer.on("connection", (socket) => {
   socket.on("setup", (userData) => {
@@ -45,6 +60,13 @@ socketServer.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`.green.bold);
+//* ENABLE HTTPS ON PRODUCTION
+if (process.env.NODE_ENV == "production") {
+  httpsServer.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`.green.bold);
+  });
+}
+
+httpServer.listen(PORT_HTTP, () => {
+  console.log(`Server is running on port ${PORT_HTTP}`.green.bold);
 });

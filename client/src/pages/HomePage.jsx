@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import {
   Container,
@@ -10,13 +11,21 @@ import {
   Tab,
   TabPanel,
   TabPanels,
+  useColorModeValue,
+  useColorMode,
+  IconButton,
 } from "@chakra-ui/react";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 
 import Signup from "../components/authentication/Signup";
 import Login from "../components/authentication/Login";
+import LanguageSelector from "../components/others/LanguageSelector";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const bg = useColorModeValue("white", "gray.800");
+  const { toggleColorMode } = useColorMode();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -25,38 +34,49 @@ const Home = () => {
   }, [navigate]);
 
   return (
-    <Container maxW="xl" centerContent>
-      <Box
-        padding="6px"
-        d="flex"
-        justifyContent="center"
-        bg={"white"}
-        width="100%"
-        margin="40px 0 15px 0"
-        borderRadius="20px"
-        borderWidth="1px"
-      >
-        <Text fontSize="4xl" color="black">
-          Challenjeu Messenger
-        </Text>
-        <Box>
-          <Tabs variant="soft-rounded" colorScheme="facebook">
-            <TabList mb="1em">
-              <Tab width="50%">Log In</Tab>
-              <Tab width="50%">Sign Up</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <Login />
-              </TabPanel>
-              <TabPanel>
-                <Signup />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+    <>
+      <Container maxW="xl" centerContent>
+        <Box
+          bg={bg}
+          padding="6px"
+          d="flex"
+          justifyContent="center"
+          width="100%"
+          margin="40px 0 15px 0"
+          borderRadius="20px"
+        >
+          <Text fontSize="4xl" textAlign="center" mb="5">
+            {t("login_title")}
+          </Text>
+          <Box>
+            <Tabs variant="soft-rounded" colorScheme="facebook">
+              <TabList mb="1em">
+                <Tab width="50%">{t("login")}</Tab>
+                <Tab width="50%">{t("signup")}</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <Login />
+                </TabPanel>
+                <TabPanel>
+                  <Signup />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+        <Box display={"flex"} mt="3">
+          <LanguageSelector />
+          <IconButton
+            onClick={toggleColorMode}
+            variant="ghost"
+            borderRadius={20}
+          >
+            <DarkModeRoundedIcon />
+          </IconButton>
+        </Box>
+      </Container>
+    </>
   );
 };
 

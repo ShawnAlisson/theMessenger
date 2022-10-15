@@ -22,6 +22,7 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import ChatContext from "../../Context/chatContext";
 import UserBadge from "../others/UserBadge";
 import UserList from "../others/UserList";
+import { t } from "i18next";
 
 const UpdateGroupChatModal = (getAgain, setGetAgain, getMessages) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -245,7 +246,12 @@ const UpdateGroupChatModal = (getAgain, setGetAgain, getMessages) => {
           bg="blackAlpha.300"
           backdropFilter="blur(10px) hue-rotate(90deg)"
         />
-        <ModalContent bg="white" borderRadius={"25px"} margin="5">
+        <ModalContent
+          bg="white"
+          borderRadius={"25px"}
+          margin="5"
+          fontFamily={"Yekan"}
+        >
           <ModalHeader display="flex" justifyContent="center">
             {selectedChat.chatName}
           </ModalHeader>
@@ -264,7 +270,7 @@ const UpdateGroupChatModal = (getAgain, setGetAgain, getMessages) => {
             <FormControl display={"flex"}>
               <Input
                 borderRadius={25}
-                placeholder="Group Name"
+                placeholder={t("group_name")}
                 mb={3}
                 value={groupChatName}
                 onChange={(e) => setGroupChatName(e.target.value)}
@@ -277,13 +283,13 @@ const UpdateGroupChatModal = (getAgain, setGetAgain, getMessages) => {
                 isLoading={renameLoading}
                 onClick={renameHandler}
               >
-                Update
+                {t("update")}
               </Button>
             </FormControl>
             <FormControl>
               <Input
                 borderRadius={25}
-                placeholder="Add User to group"
+                placeholder={t("add_user_to_group")}
                 onChange={(e) => searchHandler(e.target.value)}
               />
             </FormControl>
@@ -308,7 +314,7 @@ const UpdateGroupChatModal = (getAgain, setGetAgain, getMessages) => {
               colorScheme="red"
               mt="5"
             >
-              Leave Group
+              {t("leave_group")}
             </Button>
           </ModalBody>
         </ModalContent>

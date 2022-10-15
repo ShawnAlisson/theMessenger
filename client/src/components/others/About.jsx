@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   Modal,
@@ -10,10 +11,21 @@ import {
   useDisclosure,
   Text,
   ModalFooter,
+  Button,
+  useColorMode,
+  useColorModeValue,
+  IconButton,
+  Box,
 } from "@chakra-ui/react";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+
+import LanguageSelector from "./LanguageSelector";
 
 const About = ({ user, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t } = useTranslation();
+  const { toggleColorMode } = useColorMode();
+  const bg = useColorModeValue("white", "gray.800");
 
   return (
     <>
@@ -24,12 +36,17 @@ const About = ({ user, children }) => {
           bg="blackAlpha.300"
           backdropFilter="blur(10px) hue-rotate(90deg)"
         />
-        <ModalContent h="380px" bg="white" borderRadius={"25px"} margin="5">
-          <ModalHeader display="flex" justifyContent="center">
-            <Text>
-              Found a bug? 🐞 you can report it or make your suggestions to
-              @support 🥳
-            </Text>
+        <ModalContent h="380px" bg={bg} borderRadius={"25px"} margin="5">
+          <ModalHeader
+            fontFamily={"Yekan"}
+            mt="10"
+            display="flex"
+            flexDir={"column"}
+            justifyContent="center"
+            textAlign={"center"}
+          >
+            <Text>{t("about_text")}</Text>
+            <Text dir="ltr">@support</Text>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -41,8 +58,19 @@ const About = ({ user, children }) => {
             // fontFamily="Work sans"
             // fontWeight="bold"
           ></ModalBody>
-          <ModalFooter>
-            <Text>Made with 💜 Ver 1.0 Beta (Build 220910)</Text>
+          <ModalFooter fontFamily={"Yekan"} display={"flex"} flexDir="column">
+            <Text>{t("made_with_love")}</Text>
+            <Text>Ver 1.0 Beta (Build 221015)</Text>
+            <Box display={"flex"} mt="3">
+              <LanguageSelector />
+              <IconButton
+                onClick={toggleColorMode}
+                variant="ghost"
+                borderRadius={20}
+              >
+                <DarkModeRoundedIcon />
+              </IconButton>
+            </Box>
           </ModalFooter>
         </ModalContent>
       </Modal>

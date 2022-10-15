@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 import {
   Modal,
@@ -32,6 +33,7 @@ const GroupChatModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toast = useToast();
+  const { t } = useTranslation();
 
   //* Context
   const { user, chats, setChats } = useContext(ChatContext);
@@ -156,21 +158,21 @@ const GroupChatModal = ({ children }) => {
           bg="blackAlpha.300"
           backdropFilter="blur(10px) hue-rotate(90deg)"
         />
-        <ModalContent borderRadius={"25"} margin="5">
+        <ModalContent borderRadius={"25"} margin="5" fontFamily={"Yekan"}>
           <ModalHeader
             fontSize="35px"
             // fontFamily="Work sans"
             display="flex"
             justifyContent="center"
           >
-            New Group
+            {t("new_group")}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody display="flex" flexDir="column" alignItems="center">
             <FormControl>
               <Input
                 borderRadius={"25"}
-                placeholder="Group Name"
+                placeholder={t("group_name")}
                 mb={3}
                 onChange={(event) => setGroupChatName(event.target.value)}
               />
@@ -178,7 +180,7 @@ const GroupChatModal = ({ children }) => {
             <FormControl>
               <Input
                 borderRadius={"25"}
-                placeholder="Who would you like to add?"
+                placeholder={t("group_member_add")}
                 mb={1}
                 onChange={(event) => searchHandler(event.target.value)}
               />
@@ -213,7 +215,7 @@ const GroupChatModal = ({ children }) => {
               onClick={submitHandler}
               colorScheme="blue"
             >
-              Create Group
+              {t("create_group")}
             </Button>
           </ModalFooter>
         </ModalContent>

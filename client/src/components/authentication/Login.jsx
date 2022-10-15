@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 import {
   Button,
@@ -11,6 +12,7 @@ import {
   InputRightElement,
   VStack,
   useToast,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import HashLoader from "react-spinners/HashLoader";
@@ -25,6 +27,7 @@ const Login = () => {
 
   const toast = useToast();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   // const { setUser } = useContext(ChatContext);
 
@@ -89,27 +92,28 @@ const Login = () => {
   return (
     <VStack spacing="5px">
       <FormControl id="email" isRequired>
-        <FormLabel>Email</FormLabel>
+        <FormLabel>{t("email")}</FormLabel>
         <Input
           borderRadius={"20px"}
           variant="filled"
           type="email"
-          placeholder="Email"
+          placeholder={t("email")}
           onChange={(event) => setEmail(event.target.value)}
         />
       </FormControl>
 
       <FormControl id="password" isRequired>
-        <FormLabel>Password</FormLabel>
+        <FormLabel>{t("password")}</FormLabel>
         <InputGroup>
           <Input
             borderRadius={"20px"}
             variant="filled"
             type={show ? "text" : "password"}
-            placeholder="Password"
+            placeholder={t("password")}
             onChange={(event) => setPassword(event.target.value)}
           />
-          <InputRightElement width="2.9rem">
+
+          <InputRightElement mr={i18n.dir() === "ltr" ? "0.3rem" : "28.3rem"}>
             <Button h="1.75rem" size="xs" onClick={handleShowClick}>
               {show ? <ViewOffIcon /> : <ViewIcon />}
             </Button>
@@ -127,7 +131,7 @@ const Login = () => {
         isLoading={loading}
         spinner={<HashLoader size={24} color="white" />}
       >
-        Log In
+        {t("login")}
       </Button>
     </VStack>
   );

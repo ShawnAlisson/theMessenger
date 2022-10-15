@@ -1,16 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
+import { useTranslation } from "react-i18next";
 
 import {
   Box,
+  Button,
   FormControl,
   IconButton,
   Input,
   Text,
+  Textarea,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import HashLoader from "react-spinners/HashLoader";
 import Lottie from "react-lottie";
 
@@ -20,6 +25,7 @@ import ProfileModal from "../others/ProfileModal";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import MessagesFeed from "./MessagesFeed";
 import animationData from "../../animations/typing.json";
+import { ArrowLeftIcon } from "@chakra-ui/icons";
 
 const ENDPOINT = process.env.REACT_APP_SOCKET_URI;
 var socket, selectedChatCompare;
@@ -33,6 +39,9 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
   const [istyping, setIsTyping] = useState(false);
 
   const toast = useToast();
+  const { t, i18n } = useTranslation();
+
+  const bg = useColorModeValue("white", "gray.800");
 
   //* Lottie Animation Options
   const defaultOptions = {
@@ -186,7 +195,6 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
             pb={3}
             px={2}
             width="100%"
-            // fontFamily="Work sans"
             display="flex"
             justifyContent={{ base: "space-between" }}
             alignItems="center"
@@ -194,9 +202,19 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
             {" "}
             <IconButton
               variant={"ghost"}
+              borderRadius="20"
               display={{ base: "flex", md: "none" }}
-              icon={<ArrowBackIosNewRoundedIcon />}
-              onClick={() => setSelectedChat("")}
+              icon={
+                i18n.dir() === "ltr" ? (
+                  <ArrowBackIosNewRoundedIcon />
+                ) : (
+                  <ArrowForwardIosRoundedIcon />
+                )
+              }
+              onClick={() => {
+                setNewMessage("");
+                setSelectedChat("");
+              }}
             />
             {!selectedChat.isGroup ? (
               <>
@@ -233,7 +251,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
             flexDir="column"
             justifyContent="flex-end"
             p={3}
-            bg="white"
+            bg={bg}
             width="100%"
             height="100%"
             borderRadius="20"
@@ -246,6 +264,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
             ) : (
               <div
                 style={{
+                  direction: "ltr",
                   display: "flex",
                   flexDirection: "column",
                   overflowY: "scroll",
@@ -254,16 +273,24 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
                 <MessagesFeed messages={messages} />
               </div>
             )}
-            <FormControl onKeyDown={sendHandler} isRequired mt={3}>
-              <Input
-                variant={"filled"}
-                bg="white"
-                borderRadius={"full"}
-                placeholder="Write a message..."
-                value={newMessage}
-                onChange={typeHandler}
-              />
-            </FormControl>
+            <Box>
+              <FormControl
+                onKeyDown={sendHandler}
+                isRequired
+                mt={3}
+                display="flex"
+              >
+                <Textarea
+                  variant={"filled"}
+                  bg={bg}
+                  borderRadius={"20"}
+                  placeholder={t("write_message")}
+                  value={newMessage}
+                  onChange={typeHandler}
+                  resize="none"
+                ></Textarea>
+              </FormControl>
+            </Box>
           </Box>
         </>
       ) : (

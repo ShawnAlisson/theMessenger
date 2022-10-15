@@ -1,0 +1,30 @@
+{
+    "login_title": "theMessenger",
+    "login": "Log In",
+    "logout": "Log Out",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "confirm_password": "Confirm Password",
+    "password_helper": "At least 8 characters(at least one lowercase, one uppercase, one numeric digit and one special character (!@#$%^&*).",
+    "my_profile": "Profile",
+    "about": "About",
+    "no_new_message": "No New Message",
+    "search_user": "Search User",
+    "search_by_name_user": "Search by Name or Username",
+    "my_chats": "My Chats",
+    "new_group": "New Group",
+    "group_name": "Group Name",
+    "group_member_add": "Who would you like to add?",
+    "create_group": "Create Group",
+    "about_text":"Found a bug? 🐞 you can report it or make your suggestions to us 🥳",
+    "made_with_love": "Made with 💜",
+    "write_message": "Write a message...",
+    "update": "Update",
+    "add_user_to_group": "Add User to Group",
+    "leave_group": "Leave Group"
+
+
+    
+}
