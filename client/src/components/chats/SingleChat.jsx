@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import SendIcon from "@mui/icons-material/Send";
 import HashLoader from "react-spinners/HashLoader";
 import Lottie from "react-lottie";
 
@@ -53,10 +54,55 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
     // },
   };
 
+  function auto_height(elem) {
+    /* javascript */
+    elem.style.height = "1px";
+    elem.style.height = elem.scrollHeight + "px";
+  }
+
   //* Context
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     useContext(ChatContext);
 
+  //* submitHandler
+  const submitHandler = async () => {
+    if (newMessage) {
+      socket.emit("stoptyping", selectedChat._id);
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          baseURL: process.env.REACT_APP_SERVER_URL,
+        };
+
+        setNewMessage("");
+
+        const { data } = await axios.post(
+          `/message`,
+          {
+            content: newMessage,
+            chatId: selectedChat._id,
+          },
+          config
+        );
+
+        socket.emit("newmessage", data);
+
+        setMessages([...messages, data]);
+      } catch (error) {
+        toast({
+          title: "Oops!",
+          description: "Failed to send the Message :(",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top-right",
+        });
+      }
+    }
+  };
   //* Send Handler
   const sendHandler = async (event) => {
     if (event.key === "Enter" && newMessage) {
@@ -275,12 +321,14 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
             )}
             <Box>
               <FormControl
+                dir="ltr"
                 onKeyDown={sendHandler}
                 isRequired
                 mt={3}
                 display="flex"
               >
-                <Textarea
+                <Input
+                  dir="auto"
                   variant={"filled"}
                   bg={bg}
                   borderRadius={"20"}
@@ -288,7 +336,17 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
                   value={newMessage}
                   onChange={typeHandler}
                   resize="none"
-                ></Textarea>
+                  wordBreak="break-word"
+                ></Input>
+                <IconButton
+                  display={newMessage === "" ? "none" : "flex"}
+                  ml={2}
+                  mr={2}
+                  borderRadius={20}
+                  onClick={submitHandler}
+                >
+                  <SendIcon />
+                </IconButton>
               </FormControl>
             </Box>
           </Box>

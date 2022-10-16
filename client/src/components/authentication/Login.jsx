@@ -16,6 +16,8 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import HashLoader from "react-spinners/HashLoader";
+import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
+import MailRoundedIcon from "@mui/icons-material/MailRounded";
 
 // import ChatContext from "../../Context/chatContext";
 
@@ -93,13 +95,21 @@ const Login = () => {
     <VStack spacing="5px">
       <FormControl id="email" isRequired>
         <FormLabel>{t("email")}</FormLabel>
-        <Input
-          borderRadius={"20px"}
-          variant="filled"
-          type="email"
-          placeholder={t("email")}
-          onChange={(event) => setEmail(event.target.value)}
-        />
+        <InputGroup>
+          <Input
+            borderRadius={"20px"}
+            variant="filled"
+            type="email"
+            placeholder={t("email")}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <InputRightElement>
+            {i18n.dir() === "rtl" ? <MailRoundedIcon /> : ""}
+          </InputRightElement>
+          <InputLeftElement>
+            {i18n.dir() === "ltr" ? <MailRoundedIcon /> : ""}
+          </InputLeftElement>
+        </InputGroup>
       </FormControl>
 
       <FormControl id="password" isRequired>
@@ -113,11 +123,24 @@ const Login = () => {
             onChange={(event) => setPassword(event.target.value)}
           />
 
-          <InputRightElement mr={i18n.dir() === "ltr" ? "0.3rem" : "28.3rem"}>
-            <Button h="1.75rem" size="xs" onClick={handleShowClick}>
-              {show ? <ViewOffIcon /> : <ViewIcon />}
-            </Button>
+          <InputRightElement mr={i18n.dir() === "rtl" ? "0rem" : "0.3rem"}>
+            {i18n.dir() === "rtl" ? (
+              <VpnKeyRoundedIcon />
+            ) : (
+              <Button h="1.75rem" size="xs" onClick={handleShowClick}>
+                {show ? <ViewOffIcon /> : <ViewIcon />}
+              </Button>
+            )}
           </InputRightElement>
+          <InputLeftElement ml={i18n.dir() === "rtl" ? "0.3rem" : "0rem"}>
+            {i18n.dir() === "ltr" ? (
+              <VpnKeyRoundedIcon />
+            ) : (
+              <Button h="1.75rem" size="xs" onClick={handleShowClick}>
+                {show ? <ViewOffIcon /> : <ViewIcon />}
+              </Button>
+            )}
+          </InputLeftElement>
         </InputGroup>
       </FormControl>
 

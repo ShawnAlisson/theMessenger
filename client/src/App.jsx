@@ -4,10 +4,22 @@ import { useTranslation } from "react-i18next";
 import Home from "./pages/HomePage";
 import Chats from "./pages/ChatsPage";
 import "./assets/fonts/yekan/yekan.css";
+// import { regSw, subscribe } from "./config/subscriptionHelper";
 
 function App() {
   const { i18n } = useTranslation();
   document.body.dir = i18n.dir();
+
+  //TODO: WEB PUSH NOTIFICATION
+  // async function registerAndSubscribe() {
+  //   try {
+  //     const serviceWorkerReg = await regSw();
+  //     await subscribe(serviceWorkerReg);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   return (
     <div className="App">
       <Routes>

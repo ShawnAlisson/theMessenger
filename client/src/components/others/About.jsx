@@ -60,7 +60,7 @@ const About = ({ user, children }) => {
           ></ModalBody>
           <ModalFooter fontFamily={"Yekan"} display={"flex"} flexDir="column">
             <Text>{t("made_with_love")}</Text>
-            <Text>Ver 1.0 Beta (Build 221015)</Text>
+            <Text>Ver 1.0 Beta (Build 221017)</Text>
             <Box display={"flex"} mt="3">
               <LanguageSelector />
               <IconButton

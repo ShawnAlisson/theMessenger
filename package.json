@@ -7,8 +7,8 @@
     "start": "nodemon server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm install && npm install --force --prefix client && npm run build --prefix client",
-    "server-start": "pm2 start server/server.js"
-    
+    "server-start": "pm2 start server/server.js",
+    "gen_vapid_keys": " web-push generate-vapid-keys [--json]"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.2",
     "npm": "^8.19.2",
-    "socket.io": "^4.5.2"
+    "socket.io": "^4.5.2",
+    "web-push": "^3.5.0"
   }
 }

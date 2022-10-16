@@ -14,6 +14,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
+  useColorModeValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -33,6 +34,7 @@ const UpdateGroupChatModal = (getAgain, setGetAgain, getMessages) => {
   const [renameLoading, setRenameLoading] = useState(false);
 
   const toast = useToast();
+  const bg = useColorModeValue("white", "gray.800");
 
   //* Context
   const { selectedChat, setSelectedChat, user } = useContext(ChatContext);
@@ -247,7 +249,7 @@ const UpdateGroupChatModal = (getAgain, setGetAgain, getMessages) => {
           backdropFilter="blur(10px) hue-rotate(90deg)"
         />
         <ModalContent
-          bg="white"
+          bg={bg}
           borderRadius={"25px"}
           margin="5"
           fontFamily={"Yekan"}
