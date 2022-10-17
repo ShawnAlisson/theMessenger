@@ -23,7 +23,18 @@
     "write_message": "Write a message...",
     "update": "Update",
     "add_user_to_group": "Add User to Group",
-    "leave_group": "Leave Group"
+    "leave_group": "Leave Group",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "intro_chat_box": "Click on a user to start chatting",
+    "new_message_in": "New Message in",
+    "new_message_from": "New Message from"
+
 
 
     

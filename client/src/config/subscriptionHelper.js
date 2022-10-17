@@ -26,3 +26,66 @@
 // }
 
 // export { regSw, subscribe };
+
+// export default function checkPageStatus(message) {
+//   // if (user !== localStorage.getItem("userInfo")) {
+//   if (!("Notification" in window)) {
+//     console.log("sss");
+//     alert("This browser does not support system notifications!");
+//   } else if (Notification.permission === "default") {
+//     sendNotification(message);
+//     console.log("tried");
+//   } else if (Notification.permission === "granted") {
+//     console.log("tried");
+//     sendNotification(message);
+//   } else if (Notification.permission !== "denied") {
+//     Notification.requestPermission((permission) => {
+//       if (permission === "granted") {
+//         sendNotification(message);
+//         console.log("tried");
+//       }
+//     });
+//   }
+// }
+// }
+
+// function sendNotification(message, user) {
+//   const notification = new Notification("New message from Open Chat", {
+//     icon: "https://cdn-icons-png.flaticon.com/512/733/733585.png",
+//     body: `@${user}: ${message}`,
+//   });
+//   notification.onclick = () =>
+//     function () {
+//       window.open("http://localhost:3000/chat");
+//     };
+// }
+
+// function sendNotification(message, user) {
+//   document.onvisibilitychange = () => {
+//     if (document.hidden) {
+//       const notification = new Notification("New message from Open Chat", {
+//         icon: "https://cdn-icons-png.flaticon.com/512/733/733585.png",
+//         body: `@${user}: ${message}`,
+//       });
+//       notification.onclick = () =>
+//         function () {
+//           window.open("http://localhost:3000/chat");
+//         };
+//     }
+//   };
+// }
+
+// function sendNotification(message) {
+// document.onvisibilitychange = () => {
+//   if (document.hidden) {
+//   const notification = new Notification("New message from Open Chat", {
+//     icon: "https://cdn-icons-png.flaticon.com/512/733/733585.png",
+//     body: ` ${message}`,
+//   });
+//   notification.onclick = () =>
+//     function () {
+//       window.open("http://localhost:3000/chat");
+//     };
+// }
+//   };
+// }

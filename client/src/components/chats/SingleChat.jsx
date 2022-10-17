@@ -3,6 +3,8 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { useTranslation } from "react-i18next";
 
+// import checkPageStatus from "../../config/subscriptionHelper";
+
 import {
   Box,
   Button,
@@ -66,7 +68,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
 
   //* submitHandler
   const submitHandler = async () => {
-    if (newMessage) {
+    if (newMessage.trim()) {
       socket.emit("stoptyping", selectedChat._id);
       try {
         const config = {
@@ -105,7 +107,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
   };
   //* Send Handler
   const sendHandler = async (event) => {
-    if (event.key === "Enter" && newMessage) {
+    if (event.key === "Enter" && newMessage.trim()) {
       socket.emit("stoptyping", selectedChat._id);
       try {
         const config = {
@@ -216,6 +218,23 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
+  //TODO: WEB PUSH NOTIF
+  // useEffect(() => {
+  //   if (newMessage) {
+  //     if (
+  //       !selectedChatCompare ||
+  //       selectedChatCompare._id !== newMessage.chat._id
+  //     ) {
+  //       if (!notification.includes(newMessage)) {
+  //         setNotification([newMessage, ...notification]);
+  //         setGetAgain(!getAgain); //updating our chats in our my chats on newMessageRecieved
+  //       }
+  //     } else {
+  //       setMessages([...messages, newMessage]);
+  //     }
+  //   }
+  // }, []);
+
   useEffect(() => {
     socket.on("messagerecieved", (newMessage) => {
       if (
@@ -276,14 +295,17 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
                 ) : (
                   <>{getSender(user, selectedChat.users)}</>
                 )}
-
-                <ProfileModal
-                  user={getSenderFull(user, selectedChat.users)}
-                ></ProfileModal>
+                <Box>
+                  <ProfileModal
+                    user={getSenderFull(user, selectedChat.users)}
+                  ></ProfileModal>
+                </Box>
               </>
             ) : (
               <>
-                {selectedChat.chatName.toUpperCase()}
+                <Text width={"50%"} noOfLines="1">
+                  {selectedChat.chatName.toUpperCase()}
+                </Text>
                 <UpdateGroupChatModal
                   getAgain={getAgain}
                   setGetAgain={setGetAgain}
@@ -344,6 +366,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
                   mr={2}
                   borderRadius={20}
                   onClick={submitHandler}
+                  disabled={!newMessage.trim()}
                 >
                   <SendIcon />
                 </IconButton>
@@ -359,7 +382,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
           height="100%"
         >
           <Text fontSize="3xl" pb={3}>
-            Click on a user to start chatting
+            {t("intro_chat_box")}
           </Text>
         </Box>
       )}

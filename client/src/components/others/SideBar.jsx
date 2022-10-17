@@ -205,7 +205,7 @@ const SideBar = () => {
                 // src={user.avatar}
               />
             </MenuButton>
-            <MenuList borderRadius={"20"}>
+            <MenuList borderRadius={"20"} padding={2}>
               <ProfileModal user={user}>
                 <MenuItem borderRadius={"10"}>{t("my_profile")}</MenuItem>
               </ProfileModal>
@@ -257,6 +257,7 @@ const SideBar = () => {
                 {!notification.length && t("no_new_message")}
                 {notification.map((notif) => (
                   <MenuItem
+                    borderRadius={"10"}
                     key={notif._id}
                     onClick={() => {
                       setSelectedChat(notif.chat);
@@ -264,8 +265,11 @@ const SideBar = () => {
                     }}
                   >
                     {notif.chat.isGroupChat
-                      ? `New Message in ${notif.chat.chatName}`
-                      : `New Message from ${getSender(user, notif.chat.users)}`}
+                      ? `${t("new_message_in")} ${notif.chat.chatName}`
+                      : `${t("new_message_from")} ${getSender(
+                          user,
+                          notif.chat.users
+                        )}`}
                   </MenuItem>
                 ))}
               </MenuList>

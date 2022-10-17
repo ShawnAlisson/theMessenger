@@ -21,12 +21,49 @@ const MyChats = ({ getAgain }) => {
 
   const toast = useToast();
   const { t } = useTranslation();
-  const bg = useColorModeValue("white", "gray.800");
-  const bg_secondary = useColorModeValue("#F8F8F8", "gray.700");
 
   //* Context
   const { selectedChat, setSelectedChat, user, chats, setChats } =
     useContext(ChatContext);
+
+  //* Date Handler
+  function converToLocalTime(serverDate) {
+    var dt = new Date(Date.parse(serverDate));
+    var localDate = dt;
+
+    var gmt = localDate;
+    var min = gmt.getTime() / 1000 / 60; // convert gmt date to minutes
+    var localNow = new Date().getTimezoneOffset(); // get the timezone
+    // offset in minutes
+    var localTime = min - localNow; // get the local time
+
+    var dateStr = new Date(localTime * 1000 * 60);
+    // dateStr = dateStr.toISOString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // this will return as just the server date format i.e., yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+    // dateStr = dateStr.toString()
+    var year = dateStr.getFullYear();
+    var month = ("0" + (dateStr.getMonth() + 1)).slice(-2);
+    var day = ("0" + dateStr.getDate()).slice(-2);
+    var hour = dateStr.getHours();
+    var minute = ("0" + dateStr.getMinutes()).slice(-2);
+    var second = ("0" + dateStr.getSeconds()).slice(-2);
+    var dayWeek = dateStr.getDay();
+    return [year, month, day, hour, minute, second, dayWeek];
+  }
+
+  var days = [
+    t("sunday"),
+    t("monday"),
+    t("tuesday"),
+    t("wednesday"),
+    t("thursday"),
+    t("friday"),
+    t("saturday"),
+  ];
+
+  //* Color Modes
+  const bg = useColorModeValue("white", "gray.800");
+  const bg_secondary = useColorModeValue("#F8F8F8", "gray.700");
+  const latest_message_color = useColorModeValue("gray.600", "gray.400");
 
   //* Get Chats Handler
   const getChats = async () => {
@@ -114,17 +151,47 @@ const MyChats = ({ getAgain }) => {
                   cursor="pointer"
                   name={getSender(loggedUser, chat.users)}
                 />
-                <Box>
-                  <Text>
-                    {!chat.isGroup
-                      ? getSender(loggedUser, chat.users)
-                      : chat.chatName}
-                  </Text>
-                  {chat.isGroup ? (
-                    <GroupsRoundedIcon fontSize="medium" />
-                  ) : (
-                    <></>
-                  )}
+
+                <Box width="60%">
+                  <Box display={"flex"}>
+                    <Text
+                      mr="2"
+                      display={"flex"}
+                      flexDir={"column"}
+                      maxWidth="70%"
+                      noOfLines="1"
+                    >
+                      {!chat.isGroup
+                        ? getSender(loggedUser, chat.users)
+                        : chat.chatName}
+                    </Text>
+                    {chat.isGroup ? (
+                      <GroupsRoundedIcon fontSize="medium" />
+                    ) : (
+                      <></>
+                    )}
+                  </Box>
+                  <Box
+                    color={latest_message_color}
+                    fontSize={"14"}
+                    noOfLines="1"
+                  >
+                    {chat?.latestMessage?.content}
+                  </Box>
+                </Box>
+                <Box dir="rtl" display={"flex"} flexDir="column" width={"100%"}>
+                  <Box dir="rtl" fontSize={"10"}>
+                    {converToLocalTime(chat.updatedAt)[3]}:
+                    {converToLocalTime(chat.updatedAt)[4]}
+                  </Box>
+                  <Box dir="rtl" fontSize={"10"}>
+                    {days[converToLocalTime(chat.updatedAt)[6]]}
+                  </Box>
+                  <Box dir="rtl" fontSize={"10"}>
+                    {converToLocalTime(chat.updatedAt)[0]}/
+                    {converToLocalTime(chat.updatedAt)[1]}/
+                    {converToLocalTime(chat.updatedAt)[2]}{" "}
+                  </Box>
                 </Box>
               </Box>
             ))}

@@ -14,6 +14,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
+  Text,
   useColorModeValue,
   useDisclosure,
   useToast,
@@ -254,8 +255,13 @@ const UpdateGroupChatModal = (getAgain, setGetAgain, getMessages) => {
           margin="5"
           fontFamily={"Yekan"}
         >
-          <ModalHeader display="flex" justifyContent="center">
-            {selectedChat.chatName}
+          <ModalHeader
+            display="flex"
+            justifyContent="center"
+            width={"80%"}
+            mt="5"
+          >
+            <Text noOfLines="1">{selectedChat.chatName}</Text>
           </ModalHeader>
 
           <ModalCloseButton />
