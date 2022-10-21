@@ -18,6 +18,26 @@ const allMessages = asyncHandler(async (req, res) => {
   }
 });
 
+// Seen Message (POST /api/v1/Message/seen)
+const seenMessage = asyncHandler(async (req, res) => {
+  const { seen, messageId } = req.body;
+
+  if (!seen || !messageId) {
+    console.log("Invalid data");
+    return res.sendStatus(400);
+  }
+  var seenMessage = {
+    messageId: messageId,
+    seen: seen,
+  };
+  try {
+    await Message.findByIdAndUpdate(req.body.messageId, { seen: seen });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
 //Create New Message (POST /api/v1/Message/)
 const sendMessage = asyncHandler(async (req, res) => {
   const { content, chatId } = req.body;
@@ -55,4 +75,4 @@ const sendMessage = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allMessages, sendMessage };
+module.exports = { allMessages, sendMessage, seenMessage };

@@ -195,7 +195,7 @@ const GroupChatModal = ({ children }) => {
               ))}
             </Box>
             {loading ? (
-              <HashLoader color="#ff6b6b" size={"32"} />
+              <HashLoader color="#ff6b6b" size={"32px"} />
             ) : (
               //top 4 results
               searchResult

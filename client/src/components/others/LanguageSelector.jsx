@@ -24,7 +24,7 @@ const LanguageSelector = () => {
             icon={<LanguageRoundedIcon />}
             variant="ghost"
           />
-          <MenuList borderRadius={"20"}>
+          <MenuList borderRadius={"20"} p="2">
             <MenuItem
               borderRadius={"10"}
               onClick={() => i18n.changeLanguage("fa")}

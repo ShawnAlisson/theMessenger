@@ -3,6 +3,7 @@
 #Client
 /client/node_modules
 /client/build
+/client/public/pushe-sw.js
 /client/.env
 
 #Server

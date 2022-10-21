@@ -7,12 +7,10 @@ import { useTranslation } from "react-i18next";
 
 import {
   Box,
-  Button,
   FormControl,
   IconButton,
   Input,
   Text,
-  Textarea,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
@@ -28,7 +26,6 @@ import ProfileModal from "../others/ProfileModal";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import MessagesFeed from "./MessagesFeed";
 import animationData from "../../animations/typing.json";
-import { ArrowLeftIcon } from "@chakra-ui/icons";
 
 const ENDPOINT = process.env.REACT_APP_SOCKET_URI;
 var socket, selectedChatCompare;
@@ -40,6 +37,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  const [seen, setSeen] = useState([]);
 
   const toast = useToast();
   const { t, i18n } = useTranslation();
@@ -56,15 +54,46 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
     // },
   };
 
-  function auto_height(elem) {
-    /* javascript */
-    elem.style.height = "1px";
-    elem.style.height = elem.scrollHeight + "px";
-  }
-
   //* Context
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     useContext(ChatContext);
+
+  //* Seen Handler
+  const seenHandler = async () => {
+    if (messages.slice(-1)[0]) {
+      if (messages.slice(-1)[0].sender._id !== user._id) {
+        try {
+          const config = {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+            baseURL: process.env.REACT_APP_SERVER_URL,
+          };
+
+          const { data } = await axios.post(
+            `/message/seen`,
+            {
+              seen: true,
+              messageId: messages.slice(-1)[0]._id,
+            },
+            config
+          );
+
+          // socket.emit("seen", data);
+        } catch (error) {
+          toast({
+            title: "Oops!",
+            description: "Failed to seen the Message :(",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+            position: "top-right",
+          });
+        }
+      }
+    }
+  };
 
   //* submitHandler
   const submitHandler = async () => {
@@ -80,6 +109,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
         };
 
         setNewMessage("");
+        // setGetAgain((getAgain) => !getAgain);
 
         const { data } = await axios.post(
           `/message`,
@@ -119,6 +149,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
         };
 
         setNewMessage("");
+        // setGetAgain((getAgain) => !getAgain);
 
         const { data } = await axios.post(
           `/message`,
@@ -175,6 +206,8 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
   const getMessages = async () => {
     if (!selectedChat) return;
 
+    // setGetAgain((getAgain) => !getAgain);
+
     try {
       const config = {
         headers: {
@@ -185,12 +218,10 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
       setLoading(true);
 
       const { data } = await axios.get(`/message/${selectedChat._id}`, config);
-
       setMessages(data);
+      // seenHandler();
       setLoading(false);
       socket.emit("joinchat", selectedChat._id);
-
-      // socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast({
         title: "Oops!",
@@ -211,12 +242,27 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
     socket.on("stoptyping", () => setIsTyping(false));
   }, []);
 
-  // TODO: Try other methods
+  // useEffect(() => {
+  //   socket.on("seen", () => setSeen([...messages]));
+  //   console.log(seen);
+  // });
+
+  // useEffect(() => {
+  //   setGetAgain(!getAgain);
+  //   getMessages();
+  // }, [seen]);
+
   useEffect(() => {
     getMessages();
 
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
+
+  // useEffect(() => {
+  //   if (selectedChatCompare?._id === newMessage?.chat?._id) {
+  //     seenHandler();
+  //   }
+  // }, []);
 
   //TODO: WEB PUSH NOTIF
   // useEffect(() => {
@@ -251,6 +297,12 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
     });
   });
 
+  useEffect(() => {
+    seenHandler();
+
+    setGetAgain((getAgain) => !getAgain);
+  }, [messages]);
+
   return (
     <>
       {selectedChat ? (
@@ -277,6 +329,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
                 )
               }
               onClick={() => {
+                // setGetAgain((getAgain) => !getAgain);
                 setNewMessage("");
                 setSelectedChat("");
               }}
@@ -327,7 +380,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
           >
             {loading ? (
               <Box alignSelf={"center"} margin="auto" padding="15">
-                <HashLoader color="#ff6b6b" size={"32"} />
+                <HashLoader color="#ff6b6b" size={"32px"} />
               </Box>
             ) : (
               <div
@@ -338,7 +391,7 @@ const SingleChat = ({ getAgain, setGetAgain }) => {
                   overflowY: "scroll",
                 }}
               >
-                <MessagesFeed messages={messages} />
+                <MessagesFeed messages={messages} seen={seen} />
               </div>
             )}
             <Box>

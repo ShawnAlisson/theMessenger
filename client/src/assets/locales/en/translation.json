@@ -33,7 +33,9 @@
     "sunday": "Sunday",
     "intro_chat_box": "Click on a user to start chatting",
     "new_message_in": "New Message in",
-    "new_message_from": "New Message from"
+    "new_message_from": "New Message from",
+    "clear_all_notif": "Clear All Notifications",
+    "seen": "Seen"
 
 
 

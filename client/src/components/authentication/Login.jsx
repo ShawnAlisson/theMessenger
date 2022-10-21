@@ -152,7 +152,7 @@ const Login = () => {
         style={{ marginTop: 15, fontWeight: "bold" }}
         onClick={submitHandler}
         isLoading={loading}
-        spinner={<HashLoader size={24} color="white" />}
+        spinner={<HashLoader size={"24px"} color="white" />}
       >
         {t("login")}
       </Button>

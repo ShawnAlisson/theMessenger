@@ -11,6 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
+import FiberManualRecordRoundedIcon from "@mui/icons-material/FiberManualRecordRounded";
 
 import ChatContext from "../../Context/chatContext";
 import { getSender } from "../../config/ChatLogics";
@@ -33,17 +34,17 @@ const MyChats = ({ getAgain }) => {
 
     var gmt = localDate;
     var min = gmt.getTime() / 1000 / 60; // convert gmt date to minutes
-    var localNow = new Date().getTimezoneOffset(); // get the timezone
+    // var localNow = new Date().getTimezoneOffset(); // get the timezone
     // offset in minutes
-    var localTime = min - localNow; // get the local time
+    // var localTime = min - localNow; // get the local time
 
-    var dateStr = new Date(localTime * 1000 * 60);
+    var dateStr = new Date(min * 1000 * 60);
     // dateStr = dateStr.toISOString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // this will return as just the server date format i.e., yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
     // dateStr = dateStr.toString()
     var year = dateStr.getFullYear();
     var month = ("0" + (dateStr.getMonth() + 1)).slice(-2);
     var day = ("0" + dateStr.getDate()).slice(-2);
-    var hour = dateStr.getHours();
+    var hour = ("0" + dateStr.getHours()).slice(-2);
     var minute = ("0" + dateStr.getMinutes()).slice(-2);
     var second = ("0" + dateStr.getSeconds()).slice(-2);
     var dayWeek = dateStr.getDay();
@@ -134,6 +135,7 @@ const MyChats = ({ getAgain }) => {
         {chats ? (
           <Stack overflowY="scroll">
             {chats.map((chat, i) => (
+              // CHAT LIST BOX
               <Box
                 display={"flex"}
                 onClick={() => setSelectedChat(chat)}
@@ -145,17 +147,23 @@ const MyChats = ({ getAgain }) => {
                 borderRadius="25"
                 key={chat._id}
               >
-                <Avatar
-                  mr={2}
-                  size="md"
-                  cursor="pointer"
-                  name={getSender(loggedUser, chat.users)}
-                />
+                {/* AVATAR */}
+
+                <Box display={"flex"} mr="1">
+                  <Avatar
+                    display={"flex"}
+                    flexDir="column"
+                    size="md"
+                    cursor="pointer"
+                    name={getSender(loggedUser, chat.users)}
+                  />
+                </Box>
 
                 <Box width="60%">
+                  {/* CHAT NAME */}
                   <Box display={"flex"}>
                     <Text
-                      mr="2"
+                      mr="1"
                       display={"flex"}
                       flexDir={"column"}
                       maxWidth="70%"
@@ -170,7 +178,21 @@ const MyChats = ({ getAgain }) => {
                     ) : (
                       <></>
                     )}
+                    {/* NEW MESSAGE NOTIF */}
+                    {chat?.latestMessage?.seen !== false ? (
+                      ""
+                    ) : (
+                      <Box color={"#1982FC"}>
+                        {chat?.latestMessage?.sender._id !== user._id ? (
+                          <FiberManualRecordRoundedIcon />
+                        ) : (
+                          ""
+                        )}
+                      </Box>
+                    )}
                   </Box>
+
+                  {/* LATEST MESSAGE */}
                   <Box
                     color={latest_message_color}
                     fontSize={"14"}
@@ -179,6 +201,8 @@ const MyChats = ({ getAgain }) => {
                     {chat?.latestMessage?.content}
                   </Box>
                 </Box>
+
+                {/* CHAT DATE */}
                 <Box dir="rtl" display={"flex"} flexDir="column" width={"100%"}>
                   <Box dir="rtl" fontSize={"10"}>
                     {converToLocalTime(chat.updatedAt)[3]}:

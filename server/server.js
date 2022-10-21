@@ -45,6 +45,7 @@ socketServer.on("connection", (socket) => {
 
   socket.on("typing", (room) => socket.in(room).emit("typing"));
   socket.on("stoptyping", (room) => socket.in(room).emit("stoptyping"));
+  socket.on("seen", (room) => socket.in(room).emit("seen"));
 
   socket.on("newmessage", (newMessage) => {
     var chat = newMessage.chat;

@@ -33,7 +33,9 @@
     "sunday": "یک‌شنبه",
     "intro_chat_box": "خوش اومدی!",
     "new_message_in": "پیام جدید در",
-    "new_message_from": "پیام جدید از"
+    "new_message_from": "پیام جدید از",
+    "clear_all_notif": "پاک کردن همه‌ی نوتیفیکیشن‌ها",
+    "seen": "خوانده شده"
 
 
 }

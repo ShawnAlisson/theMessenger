@@ -11,7 +11,6 @@ import {
   useDisclosure,
   Text,
   ModalFooter,
-  Button,
   useColorMode,
   useColorModeValue,
   IconButton,
@@ -60,7 +59,7 @@ const About = ({ user, children }) => {
           ></ModalBody>
           <ModalFooter fontFamily={"Yekan"} display={"flex"} flexDir="column">
             <Text>{t("made_with_love")}</Text>
-            <Text>Ver 1.0 Beta (Build 221018)</Text>
+            <Text>Ver 1.0 Beta (Build 221022)</Text>
             <Box display={"flex"} mt="3">
               <LanguageSelector />
               <IconButton

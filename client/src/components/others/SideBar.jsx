@@ -254,7 +254,20 @@ const SideBar = () => {
                 <BellIcon fontSize="2xl" margin={1} />
               </MenuButton>
               <MenuList pl={2} borderRadius="20" padding={2}>
-                {!notification.length && t("no_new_message")}
+                <MenuItem borderRadius={"10"}>
+                  {!notification.length ? (
+                    t("no_new_message")
+                  ) : (
+                    <Text
+                      onClick={() => {
+                        setNotification([]);
+                      }}
+                    >
+                      {t("clear_all_notif")}
+                    </Text>
+                  )}
+                </MenuItem>
+
                 {notification.map((notif) => (
                   <MenuItem
                     borderRadius={"10"}
