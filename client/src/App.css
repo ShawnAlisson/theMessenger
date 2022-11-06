@@ -1,7 +1,6 @@
-
   .App {
     touch-action: none;
-    font-family: 'Helvetica Neue', 'Yekan';
+    font-family: 'Yekan', 'Helvetica Neue';
     display:flex;
     align-items: center;
     min-height: 100vh;

@@ -35,8 +35,25 @@
     "new_message_in": "New Message in",
     "new_message_from": "New Message from",
     "clear_all_notif": "Clear All Notifications",
-    "seen": "Seen"
-
+    "seen": "Seen",
+    "username": "Username",
+    "bio": "Biography",
+    "status": "Status",
+    "website": "Website",
+    "relationship": "Relationship",
+    "location": "Location",
+    "back": "Back",
+    "submit": "Submit",
+    "edit_profile": "Edit Profile",
+    "acc_info": "Account Information",
+    "security": "Security",
+    "title": "Title",
+    "gender": "Gender",
+    "dark_mode": "Dark Mode",
+    "light_mode": "Light Mode",
+    "current_password": "Current Password",
+    "update_password": "Change Password",
+    "joined": "Joined"
 
 
     

@@ -35,7 +35,26 @@
     "new_message_in": "پیام جدید در",
     "new_message_from": "پیام جدید از",
     "clear_all_notif": "پاک کردن همه‌ی نوتیفیکیشن‌ها",
-    "seen": "خوانده شده"
+    "seen": "خوانده شده",
+    "username": "نام کاربری",
+    "bio": "بیوگرافی",
+    "status": "وضعیت",
+    "website": "وبسایت",
+    "relationship": "وضعیت رابطه",
+    "location": "موقعیت مکانی",
+    "back": "بازگشت",
+    "submit": "ثبت",
+    "edit_profile": "ویرایش پروفایل",
+    "acc_info": "اطلاعات اکانت",
+    "security": "امنیت",
+    "title": "عنوان",
+    "gender": "جنسیت",
+    "dark_mode": "حالت تاریک",
+    "light_mode": "حالت روشن",
+    "current_password": "رمز عبور کنونی",
+    "update_password": "تغییر رمزعبور",
+    "joined": "زمان عضویت: "
+
 
 
 }

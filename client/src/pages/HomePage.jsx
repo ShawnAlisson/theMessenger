@@ -12,20 +12,17 @@ import {
   TabPanel,
   TabPanels,
   useColorModeValue,
-  useColorMode,
-  IconButton,
+  SimpleGrid,
 } from "@chakra-ui/react";
-import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 
 import Signup from "../components/authentication/Signup";
 import Login from "../components/authentication/Login";
-import LanguageSelector from "../components/others/LanguageSelector";
+import Footer from "../components/others/Footer";
 
 const Home = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const bg = useColorModeValue("white", "gray.800");
-  const { toggleColorMode } = useColorMode();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -34,49 +31,52 @@ const Home = () => {
   }, [navigate]);
 
   return (
-    <>
-      <Container maxW="xl" centerContent>
-        <Box
-          bg={bg}
-          padding="6px"
-          d="flex"
-          justifyContent="center"
-          width="100%"
-          margin="40px 0 15px 0"
-          borderRadius="20px"
-        >
+    <Container maxW="6xl" centerContent>
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2} width="100%">
+        <Box width="100%" mt={{ base: "", md: "150" }}>
           <Text fontSize="4xl" textAlign="center" mb="5">
             {t("login_title")}
           </Text>
-          <Box>
-            <Tabs variant="soft-rounded" colorScheme="facebook">
-              <TabList mb="1em">
-                <Tab width="50%">{t("login")}</Tab>
-                <Tab width="50%">{t("signup")}</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
-                  <Login />
-                </TabPanel>
-                <TabPanel>
-                  <Signup />
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </Box>
         </Box>
-        <Box display={"flex"} mt="3">
-          <LanguageSelector />
-          <IconButton
-            onClick={toggleColorMode}
-            variant="ghost"
-            borderRadius={20}
+        <Box
+          display="flex"
+          flexDir={"column"}
+          width="100%"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box
+            bg={bg}
+            padding="6px"
+            // display="flex"
+            maxW={"lg"}
+            justifyContent="center"
+            width="100%"
+            margin="40px 0 15px 0"
+            borderRadius="20px"
           >
-            <DarkModeRoundedIcon />
-          </IconButton>
+            <Box>
+              <Tabs variant="soft-rounded" colorScheme="facebook">
+                <TabList mb="1em">
+                  <Tab width="50%">{t("login")}</Tab>
+                  <Tab width="50%">{t("signup")}</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <Login />
+                  </TabPanel>
+                  <TabPanel>
+                    <Signup />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </Box>
+          </Box>
+
+          <Footer />
         </Box>
-      </Container>
-    </>
+      </SimpleGrid>
+    </Container>
   );
 };
 

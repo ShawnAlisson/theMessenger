@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import Moment from "react-moment";
+import "moment/locale/fa";
 
 import {
   Avatar,
@@ -21,45 +23,11 @@ const MyChats = ({ getAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
   const toast = useToast();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   //* Context
   const { selectedChat, setSelectedChat, user, chats, setChats } =
     useContext(ChatContext);
-
-  //* Date Handler
-  function converToLocalTime(serverDate) {
-    var dt = new Date(Date.parse(serverDate));
-    var localDate = dt;
-
-    var gmt = localDate;
-    var min = gmt.getTime() / 1000 / 60; // convert gmt date to minutes
-    // var localNow = new Date().getTimezoneOffset(); // get the timezone
-    // offset in minutes
-    // var localTime = min - localNow; // get the local time
-
-    var dateStr = new Date(min * 1000 * 60);
-    // dateStr = dateStr.toISOString("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // this will return as just the server date format i.e., yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
-    // dateStr = dateStr.toString()
-    var year = dateStr.getFullYear();
-    var month = ("0" + (dateStr.getMonth() + 1)).slice(-2);
-    var day = ("0" + dateStr.getDate()).slice(-2);
-    var hour = ("0" + dateStr.getHours()).slice(-2);
-    var minute = ("0" + dateStr.getMinutes()).slice(-2);
-    var second = ("0" + dateStr.getSeconds()).slice(-2);
-    var dayWeek = dateStr.getDay();
-    return [year, month, day, hour, minute, second, dayWeek];
-  }
-
-  var days = [
-    t("sunday"),
-    t("monday"),
-    t("tuesday"),
-    t("wednesday"),
-    t("thursday"),
-    t("friday"),
-    t("saturday"),
-  ];
 
   //* Color Modes
   const bg = useColorModeValue("white", "gray.800");
@@ -203,18 +171,16 @@ const MyChats = ({ getAgain }) => {
                 </Box>
 
                 {/* CHAT DATE */}
-                <Box dir="rtl" display={"flex"} flexDir="column" width={"100%"}>
+                <Box dir="rtl" display={"flex"} width={"100%"}>
                   <Box dir="rtl" fontSize={"10"}>
-                    {converToLocalTime(chat.updatedAt)[3]}:
-                    {converToLocalTime(chat.updatedAt)[4]}
-                  </Box>
-                  <Box dir="rtl" fontSize={"10"}>
-                    {days[converToLocalTime(chat.updatedAt)[6]]}
-                  </Box>
-                  <Box dir="rtl" fontSize={"10"}>
-                    {converToLocalTime(chat.updatedAt)[0]}/
-                    {converToLocalTime(chat.updatedAt)[1]}/
-                    {converToLocalTime(chat.updatedAt)[2]}{" "}
+                    <Text dir={i18n.language === "en" ? "ltr" : "rtl"}>
+                      <Moment
+                        fromNow
+                        locale={i18n.language === "en" ? "en" : "fa"}
+                      >
+                        {chat.updatedAt}
+                      </Moment>
+                    </Text>
                   </Box>
                 </Box>
               </Box>

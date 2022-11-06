@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const bcrypt = require("bcrypt");
 const User = require("../models/users");
 const { generateToken } = require("../helpers/tokens");
 const {
@@ -12,26 +13,26 @@ const {
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  //* Validation: Filling All Fields
+  // Validation: Filling All Fields
   if (!name || !email || !password) {
     res.status(400);
     throw new Error("Please make sure all fields are filled");
   }
 
-  //* Validation: Correct Email
+  // Validation: Correct Email
   if (!validateEmail(email)) {
     return res.status(400).json({ success: false, message: "Invalid email." });
   }
 
   const userExists = await User.findOne({ email });
 
-  //* Validation: Unique Email
+  // Validation: Unique Email
   if (userExists) {
     res.status(400);
     throw new Error("The email address already exists.");
   }
 
-  //* Validation: Password Strength
+  // Validation: Password Strength
   if (!validatePassword(password)) {
     return res.status(400).json({
       success: false,
@@ -40,7 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   }
 
-  //* Make temp username and check for uniqueness
+  // Make temp username and check for uniqueness
   let tempUsername = name.replace(/ /g, "");
   let newUsername = await validateUsername(tempUsername);
 
@@ -58,6 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       username: user.username,
       token: generateToken(user._id),
+      createdAt: user.createdAt,
     });
   } else {
     res.status(400);
@@ -65,16 +67,20 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Login the user (POST /api/v1/user/login)
+//* Login the user (POST /api/v1/user/login)
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+  const profile = await User.findOne({ email }).select("-password");
 
   if (user && (await user.checkPassword(password))) {
     res.json({
       _id: user._id,
       name: user.name,
+      username: user.username,
       email: user.email,
+      details: user.details,
+      createdAt: user.createdAt,
       token: generateToken(user._id),
     });
   } else {
@@ -83,7 +89,156 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Get or Search all users (GET /api/v1/user?search=)
+const getProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.body.userId).select("-password");
+  if (user) {
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      username: user.username,
+      details: user.details,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Oops, something went wrong");
+  }
+});
+
+//* Update Password
+const updatePassword = asyncHandler(async (req, res) => {
+  const { password, currentPassword } = req.body;
+
+  if (!password || !currentPassword) {
+    res.status(400);
+    throw new Error("Please make sure all fields are filled");
+  }
+
+  // Validation: Password Strength
+  if (!validatePassword(password)) {
+    return res.status(400).json({
+      success: false,
+      message:
+        "Password must be at least 8 characters, which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character (!@#$%^&*).",
+    });
+  }
+
+  const salt = await bcrypt.genSalt(12);
+  encryptedPassword = await bcrypt.hash(password, salt);
+
+  const user = await User.findById(req.body.userId);
+
+  const isSamePassword = await bcrypt.compare(password, user.password);
+
+  if (isSamePassword) {
+    return res.status(400).json({
+      success: false,
+      message: "The new password cannot be the same as the current password",
+    });
+  }
+
+  const isCurrentPassword = await bcrypt.compare(
+    currentPassword,
+    user.password
+  );
+
+  if (!isCurrentPassword) {
+    return res.status(400).json({
+      success: false,
+      message: "Current Password is Incorrect!",
+    });
+  }
+
+  await User.findByIdAndUpdate(
+    req.body.userId,
+
+    {
+      password: encryptedPassword,
+    }
+  );
+  return res.status(200).json({ message: "ok" });
+});
+
+//* Update Profile Details
+const updateDetails = async (req, res) => {
+  try {
+    const { infos } = req.body;
+
+    const updated = await User.findByIdAndUpdate(
+      req.body.userId,
+      {
+        details: infos,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(updated.details);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//* Update existing profile
+const updateProfile = asyncHandler(async (req, res) => {
+  const { name, email, username } = req.body;
+
+  // Validation: Correct Email
+  if (email) {
+    if (!validateEmail(email)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid email." });
+    }
+  }
+
+  const userExists = await User.findOne({ email });
+
+  // Validation: Unique Email
+  if (userExists) {
+    res.status(400);
+    throw new Error("The email address already exists.");
+  }
+
+  const usernameExists = await User.findOne({ username });
+
+  // Validation: Unique Email
+  if (username) {
+    if (usernameExists) {
+      res.status(400);
+      throw new Error("The username already exists.");
+    }
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.body.userId,
+    {
+      name,
+      email,
+      username,
+    },
+    {
+      new: true,
+    }
+  );
+
+  if (user) {
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      username: user.username,
+      details: user.details,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Oops, something went wrong");
+  }
+});
+
+//* Get or Search all users (GET /api/v1/user?search=)
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
@@ -100,4 +255,12 @@ const allUsers = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
-module.exports = { registerUser, authUser, allUsers };
+module.exports = {
+  registerUser,
+  authUser,
+  allUsers,
+  updateProfile,
+  updateDetails,
+  updatePassword,
+  getProfile,
+};

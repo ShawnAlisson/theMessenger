@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
 
-import { ChakraProvider } from "@chakra-ui/react";
+import { Box, ChakraProvider } from "@chakra-ui/react";
+import HashLoader from "react-spinners/HashLoader";
 
 import "./i18nextConf";
 import "./index.css";
@@ -14,7 +15,21 @@ root.render(
   <Router>
     <ChatProvider>
       <ChakraProvider>
-        <App />
+        <Suspense
+          fallback={
+            <Box
+              position="fixed"
+              top="50%"
+              right={"50%"}
+              backdropFilter="auto"
+              backdropBlur="8px"
+            >
+              <HashLoader size={"60px"} color="red" />
+            </Box>
+          }
+        >
+          <App />
+        </Suspense>
       </ChakraProvider>
     </ChatProvider>
   </Router>

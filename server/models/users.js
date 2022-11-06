@@ -92,20 +92,17 @@ const userSchema = mongoose.Schema(
       website: {
         type: String,
       },
-      status: {
-        type: String,
-      },
-      relationship: {
-        type: String,
-        enum: [
-          "Single",
-          "In a realationship",
-          "Complicated",
-          "Married",
-          "Separated",
-          "in an open relationship",
-        ],
-      },
+      // relationship: {
+      //   type: String,
+      //   enum: [
+      //     "Single",
+      //     "In a realationship",
+      //     "Complicated",
+      //     "Married",
+      //     "Separated",
+      //     "in an open relationship",
+      //   ],
+      // },
     },
   },
   {

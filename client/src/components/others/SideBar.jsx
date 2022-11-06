@@ -2,6 +2,11 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
+import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
+import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import InfoIcon from "@mui/icons-material/Info";
 
 import {
   Avatar,
@@ -25,6 +30,7 @@ import {
   useColorModeValue,
   useDisclosure,
   useToast,
+  useColorMode,
 } from "@chakra-ui/react";
 import { Search2Icon, BellIcon } from "@chakra-ui/icons";
 import HashLoader from "react-spinners/HashLoader";
@@ -42,13 +48,14 @@ import About from "./About";
 import i18next from "i18next";
 
 const SideBar = () => {
+  const { colorMode, toggleColorMode } = useColorMode();
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
 
   const toast = useToast();
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const firstField = React.useRef();
@@ -205,13 +212,63 @@ const SideBar = () => {
                 // src={user.avatar}
               />
             </MenuButton>
+
             <MenuList borderRadius={"20"} padding={2}>
-              <ProfileModal user={user}>
-                <MenuItem borderRadius={"10"}>{t("my_profile")}</MenuItem>
+              <ProfileModal user={user} detail={user.details}>
+                <MenuItem justifyContent={"space-between"} borderRadius={"10"}>
+                  {t("my_profile")}
+                  <AccountCircleRoundedIcon />
+                </MenuItem>
               </ProfileModal>
+              <MenuDivider />
+              <MenuItem
+                justifyContent={"space-between"}
+                borderRadius={"10"}
+                onClick={
+                  i18n.language === "en"
+                    ? () => i18n.changeLanguage("fa")
+                    : () => i18n.changeLanguage("en")
+                }
+              >
+                {i18n.language === "en" ? (
+                  <Box display={"flex"}>
+                    <Text>Persian</Text>
+                    <Text ml="1" mr="1">
+                      |
+                    </Text>
+                    <Text color={"green.500"}> English</Text>
+                  </Box>
+                ) : (
+                  <Box display={"flex"}>
+                    <Text color="green.500">فارسی</Text>
+                    <Text ml="1" mr="1">
+                      |
+                    </Text>
+                    <Text> انگلیسی</Text>
+                  </Box>
+                )}
+
+                <LanguageRoundedIcon />
+              </MenuItem>
+              <MenuItem
+                borderRadius={"10"}
+                onClick={toggleColorMode}
+                justifyContent={"space-between"}
+              >
+                {colorMode === "light" ? t("dark_mode") : t("light_mode")}
+                {colorMode === "light" ? (
+                  <DarkModeRoundedIcon />
+                ) : (
+                  <LightModeRoundedIcon />
+                )}
+              </MenuItem>
               <About user={user}>
-                <MenuItem borderRadius={"10"}>{t("about")}</MenuItem>
+                <MenuItem borderRadius={"10"} justifyContent={"space-between"}>
+                  {t("about")}
+                  <InfoIcon />
+                </MenuItem>
               </About>
+
               <MenuDivider />
               <MenuItem borderRadius={"10"} color="red" onClick={logoutHandler}>
                 {t("logout")}

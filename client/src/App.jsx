@@ -1,10 +1,13 @@
-import "./App.css";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+import "./App.css";
 import Home from "./pages/HomePage";
-import Chats from "./pages/ChatsPage";
 import "./assets/fonts/yekan/yekan.css";
 // import { regSw, subscribe } from "./config/subscriptionHelper";
+
+const Chats = React.lazy(() => import("./pages/ChatsPage"));
 
 function App() {
   const { i18n } = useTranslation();
