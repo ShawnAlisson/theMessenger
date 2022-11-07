@@ -32,6 +32,7 @@ const seenMessage = asyncHandler(async (req, res) => {
   };
   try {
     await Message.findByIdAndUpdate(req.body.messageId, { seen: seen });
+    res.json("ok");
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
