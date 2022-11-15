@@ -53,7 +53,15 @@
     "light_mode": "حالت روشن",
     "current_password": "رمز عبور کنونی",
     "update_password": "تغییر رمزعبور",
-    "joined": "زمان عضویت: "
+    "joined": "زمان عضویت: ",
+    "forgot_password": "فراموشی رمز عبور؟ ",
+    "enter_email_for_reset": "آدرس ایمیل خود را وارد نمایید",
+    "send_code": "ارسال کد",
+    "enter_code": "کد دریافت شده را وارد نمایید",
+    "spam_alert": "در صورت عدم دریافت، فولدر اسپم ایمیلتان را بررسی نمایید",
+    "verify_code": "تایید کد",
+    "change_password": "تغییر رمز عبور",
+    "resend": "ارسال دوباره"
 
 
 

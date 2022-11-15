@@ -23,6 +23,7 @@
     "i": "^0.3.7",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.2",
+    "nodemailer": "^6.8.0",
     "npm": "^8.19.2",
     "socket.io": "^4.5.2",
     "web-push": "^3.5.0"

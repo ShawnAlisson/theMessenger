@@ -53,7 +53,16 @@
     "light_mode": "Light Mode",
     "current_password": "Current Password",
     "update_password": "Change Password",
-    "joined": "Joined"
+    "joined": "Joined",
+    "forgot_password": "Forgot Password?",
+    "enter_email_for_reset": "Enter your email address",
+    "send_code": "Send Code",
+    "enter_code": "Enter the code you received",
+    "spam_alert": "If it isn't in your inbox, it might be in the Spam, Junk Folder.",
+    "verify_code": "Verify Code",
+    "change_password": "Change Password",
+    "resend": "Resend"
+
 
 
     

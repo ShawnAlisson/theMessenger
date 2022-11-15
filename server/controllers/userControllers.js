@@ -1,6 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const User = require("../models/users");
+const Code = require("../models/code");
+const { sendVerificationEmail, sendResetCode } = require("../helpers/email");
+const generateCode = require("../helpers/generateCode");
 const { generateToken } = require("../helpers/tokens");
 const {
   validateEmail,
@@ -88,6 +91,66 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("The email address or password is incorrect");
   }
 });
+
+//* Send Reset Password Code
+const sendResetPasswordCode = asyncHandler(async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email }).select("-password");
+    await Code.findOneAndRemove({ user: user._id });
+    const code = generateCode(5);
+    const savedCode = await new Code({
+      code,
+      user: user._id,
+    }).save();
+    sendResetCode(user.email, user.name, code);
+    return res.status(200).json({
+      message: "Email reset code has been sent to your email",
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//* Validate Reset Password Code
+const validateResetCode = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    const user = await User.findOne({ email });
+    const Dbcode = await Code.findOne({ user: user._id });
+    if (Dbcode.code !== code) {
+      return res.status(400).json({
+        message: "Verification code is wrong.",
+      });
+    }
+    return res.status(200).json({ message: "ok" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//* Reset Password
+const changePassword = async (req, res) => {
+  const { email, password } = req.body;
+
+  // Validation: Password Strength
+  if (!validatePassword(password)) {
+    return res.status(400).json({
+      success: false,
+      message:
+        "Password must be at least 8 characters, which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character (!@#$%^&*).",
+    });
+  }
+
+  const cryptedPassword = await bcrypt.hash(password, 12);
+  await User.findOneAndUpdate(
+    { email },
+    {
+      password: cryptedPassword,
+    }
+  );
+  return res.status(200).json({ message: "ok" });
+};
 
 const getProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.body.userId).select("-password");
@@ -262,5 +325,8 @@ module.exports = {
   updateProfile,
   updateDetails,
   updatePassword,
+  sendResetPasswordCode,
+  validateResetCode,
+  changePassword,
   getProfile,
 };

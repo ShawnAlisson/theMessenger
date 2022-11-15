@@ -485,7 +485,7 @@ const ProfileModal = ({ user, detail, children }) => {
                     <HistoryIcon />
 
                     <Text fontSize="sm">
-                      {t("joined")}
+                      {t("joined")}{" "}
                       <Moment
                         fromNow
                         locale={i18n.language === "en" ? "en" : "fa"}
@@ -763,7 +763,7 @@ const ProfileModal = ({ user, detail, children }) => {
               </>
             )}
           </ModalBody>
-          <ModalFooter justifyContent={"space-between"}>
+          <ModalFooter justifyContent={"space-between"} mb="5">
             {visiblity !== 1 && (
               <Button
                 borderRadius={20}

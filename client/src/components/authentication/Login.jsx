@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 
@@ -13,11 +13,14 @@ import {
   VStack,
   useToast,
   InputLeftElement,
+  Box,
+  Text,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import HashLoader from "react-spinners/HashLoader";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import MailRoundedIcon from "@mui/icons-material/MailRounded";
+import ResetModal from "./ResetPassword/ResetModal";
 
 // import ChatContext from "../../Context/chatContext";
 
@@ -142,6 +145,9 @@ const Login = () => {
             )}
           </InputLeftElement>
         </InputGroup>
+        <Box display={"flex"} mt="3" fontSize={"xs"} mx="3">
+          <ResetModal></ResetModal>
+        </Box>
       </FormControl>
 
       <Button
