@@ -8,7 +8,7 @@
   <h3 align="center">theMessenger</h3>
 
   <p align="center">
-    theMessenger is a free messaging service that allows you to stay connected with your friends and family. It is now part of the <a href="https://challenjeu.ir">Challenjeu</a> and updates on this repo are released in longer periods. You can access Challenjeu Messenger from <a href="https://challenjeu.ir/messenger">here</a>!
+    theMessenger is a free messaging service that allows you to stay connected with your friends and family. It is now part of the <a href="https://challenjeu.com">Challenjeu</a> and updates on this repo are released in longer periods.
   </p>
 </div>
 
